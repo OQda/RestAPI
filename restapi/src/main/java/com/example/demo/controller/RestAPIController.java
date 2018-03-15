@@ -17,13 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.github.asilvestre.jpurexml.XmlParseException;
 
-import process.InputXmlList;
 import process.JsonConverter;
 
 @RestController
 public class RestAPIController {
 	
-	InputXmlList ixl = new InputXmlList();
 	JsonConverter converter = new JsonConverter();
 
     @RequestMapping(value="/xml2json",
@@ -34,10 +32,6 @@ public class RestAPIController {
 			@RequestBody String xml) throws IOException, XmlParseException {
 //    	Map<String,Object> map = new HashMap<String,Object>();
 //    	map.put("xml2json", "success");
-    	
-//    	ixl.setXmlToJson(xml);    	
-//    	System.out.println(ixl.getXmlToJson());
-//    	String jsonPrint = ixl.getXmlToJson();
     	
 //      System.out.println("xml2json success \n"+xml);
 //      return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);

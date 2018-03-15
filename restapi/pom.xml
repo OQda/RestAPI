@@ -24,22 +24,9 @@
 		<java.version>1.8</java.version>
 	</properties>
 
-	<dependencies>
-	
-		<!-- for transforming beans, maps, collections, java arrays and XML to JSON --> 
-		<dependency>
-			<groupId>net.sf.json-lib</groupId>
-			<artifactId>json-lib</artifactId>
-			<version>2.4</version>
-			<classifier>jdk15</classifier>
-		</dependency> 
+	<dependencies>		
 		
-		<dependency>
-			<groupId>xom</groupId>
-			<artifactId>xom</artifactId>
-			<version>1.0</version>
-		</dependency>
-		
+		<!-- 참고 라이브러리 XML → JSON (https://github.com/asilvestre/jxmltojson) -->
 		<dependency>
 			<groupId>com.github.asilvestre</groupId>
 			<artifactId>jpurexml</artifactId>
