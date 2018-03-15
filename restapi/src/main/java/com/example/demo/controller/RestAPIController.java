@@ -15,20 +15,33 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.github.asilvestre.jpurexml.XmlParseException;
+
+import process.InputXmlList;
+import process.JsonConverter;
+
 @RestController
 public class RestAPIController {
+	
+	InputXmlList ixl = new InputXmlList();
+	JsonConverter converter = new JsonConverter();
 
     @RequestMapping(value="/xml2json",
     		method=RequestMethod.POST,
     		consumes="application/xml",
     		produces="application/json")
-    public ResponseEntity<Map<String,Object>> xtoj(HttpServletRequest request, 
-			@RequestBody String xml) {
-    	Map<String,Object> map = new HashMap<String,Object>();
-    	map.put("xml2json", "success");
-    	map.put("test1", "result1");
-        System.out.println("xml2json success \n"+xml);
-        return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+    public String xtoj(HttpServletRequest request, 
+			@RequestBody String xml) throws IOException, XmlParseException {
+//    	Map<String,Object> map = new HashMap<String,Object>();
+//    	map.put("xml2json", "success");
+    	
+//    	ixl.setXmlToJson(xml);    	
+//    	System.out.println(ixl.getXmlToJson());
+//    	String jsonPrint = ixl.getXmlToJson();
+    	
+//      System.out.println("xml2json success \n"+xml);
+//      return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
+    	return converter.convertXml(xml);
     }
     
     @RequestMapping(value="/json2xml",
