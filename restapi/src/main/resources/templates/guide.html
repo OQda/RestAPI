@@ -78,10 +78,10 @@ var xml2json = function(_data){
 	    contentType : "application/xml",
 	    cache: false,
 		success : function(data) {   
-	    	$("#output-xml-to-json").html(JSON.stringify(data,null,4));
+	    	$("#output-xml-to-json").val(JSON.stringify(data,null,4));
 		},
 		error : function(){
-			$("#output-xml-to-json").html("xml2json error");
+			$("#output-xml-to-json").val("xml2json error");
 		}
 	});
 }
@@ -95,10 +95,10 @@ var json2xml = function(_data){
 	    cache: false,
 		success : function(data) {  
 			var xmlText = new XMLSerializer().serializeToString(data);
-	    	$("#output-json-to-xml").html(xmlText);
+	    	$("#output-json-to-xml").val(xmlText);
 		},
 		error : function(){
-			$("#output-json-to-xml").html("json2xml error");
+			$("#output-json-to-xml").val("json2xml error");
 		}
 	});
 }

@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.github.asilvestre.jpurexml.XmlParseException;
 
 import process_jsonToxml.XmlConverter;
+import process_xmlToFromjson.dualConverter;
 import process_xmlTojson.JsonConverter;
 
 @RestController
@@ -29,6 +30,7 @@ public class RestAPIController {
 	
 	JsonConverter json_converter = new JsonConverter();
 	XmlConverter xml_converter = new XmlConverter();
+	dualConverter dual_converter = new dualConverter();
 
     @RequestMapping(value="/xml2json",
     		method=RequestMethod.POST,
@@ -41,7 +43,9 @@ public class RestAPIController {
     	
 //      System.out.println("xml2json success \n"+xml);
 //      return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
-    	return json_converter.convertXml(xml);
+    	
+//    	return json_converter.convertXml(xml);
+    	return dual_converter.xml2json(xml);
     }
     
     @RequestMapping(value="/json2xml",
@@ -56,7 +60,8 @@ public class RestAPIController {
 //        System.out.println("json2xml success \n"+json);
 //    	return xml;
     	
-    	return xml_converter.convertJson(json); 
+//    	return xml_converter.convertJson(json);
+    	return dual_converter.json2xml(json);
   
     }
     
