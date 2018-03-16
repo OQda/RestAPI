@@ -14,7 +14,7 @@
  * the License.
  */
 
-package process;
+package process_xmlTojson;
 
 /**
  * Class that holds a configuration for the converter from XML to JSON 
@@ -23,12 +23,12 @@ public class ConverterConfig {
 	/**
 	 * String to prepend to attribute names
 	 */
-	public String attributePrefix = "-";
+	public String attributePrefix = "@";
 	
 	/**
 	 * How to name the content entry
 	 */
-	public String contentId = "#text";
+	public String contentId = "$";
 	
 	/**
 	 * String to append to a child group with the same name

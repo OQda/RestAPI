@@ -32,6 +32,13 @@
 			<artifactId>jpurexml</artifactId>
 			<version>0.12</version>
 		</dependency>
+		
+		<!-- 참고 라이브러리 JSON → XML (https://dzone.com/articles/staxon-json-stax) -->
+		<dependency>
+		    <groupId>de.odysseus.staxon</groupId>
+		    <artifactId>staxon</artifactId>
+		    <version>1.0</version>
+		</dependency>
 			        
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

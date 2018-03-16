@@ -14,7 +14,7 @@
  * the License.
  */
 
-package process;
+package process_xmlTojson;
 
 import java.util.AbstractMap;
 import java.util.Iterator;
