@@ -13,41 +13,35 @@
 
 <style>
 textarea{
-	width:250px;
+	width:40%;
 	height:250px;
 }
 </style>
 </head>
 <body>
-	<div class="container-fluid">
-		<div class="row">
-			
+	<div class="container-fluid" style="margin-top:20px;">
+		<div class="row">			
 			<!-- buttons -->
-			<div class="col col-xs-3">
-				
-				<button id="id-xml-to-json" type="button" class="btn btn-info btn-block">xml to json</button>
-				<br />
-												
-				<button id="id-json-to-xml" type="button" class="btn btn-warning btn-block">json to xml</button>			
-				<br />
-																	
-			</div>
+			<div>				
+				<button id="id-xml-to-json" type="button" class="btn btn-primary btn-block" style="margin-left:20px;float:left;width:40%;">xml to json</button>	
 						
-			<div class="col col-xs-1">
-			</div>
-			
+				<button id="id-json-to-xml" type="button" class="btn btn-danger btn-block" style="margin-right:20px;margin-top:0px;float:right;width:40%;">json to xml</button>				
+			</div>			
+		</div>
+		<div class="row" style="margin-top:20px;">
 			<!-- output -->
-			<div class="col col-xs-8">
-				<div id="xml-to-json" style="display:none;">
-					<textarea id="input-xml"></textarea>
-					<button type="button" id="convert-xml-to-json">convert</button>
-					<textarea id="output-xml-to-json"></textarea>
+			<div>
+				<div id="xml-to-json" style="display:none;position:relative;">
+					<textarea id="input-xml" placeholder="input XML" style="margin-left:20px;float:left;"></textarea>
+					<button type="button" id="convert-xml-to-json" style="position:absolute;float:center;left:50%;top:110px;margin-left:-30px;">convert</button>
+					<textarea id="output-xml-to-json" placeholder="output JSON" style="margin-right:20px;float:right;"></textarea>
 				</div>
 				
-				<div id="json-to-xml" style="display:none;">
-					<textarea id="input-json"></textarea>
-					<button type="button" id="convert-json-to-xml">convert</button>
-					<textarea id="output-json-to-xml"></textarea>
+				<div id="json-to-xml" style="display:none;position:relative;">
+					<textarea id="input-json" placeholder="input JSON" style="margin-left:20px;float:left;"></textarea>
+					<button type="button" id="convert-json-to-xml" style="position:absolute;left:50%;top:110px;margin-left:-30px;">convert</button>
+					<textarea id="output-json-to-xml" placeholder="output XML" style="margin-right:20px;float:right;"></textarea>
+					
 				</div>
 			</div>
 		</div>
@@ -79,9 +73,23 @@ var xml2json = function(_data){
 	    cache: false,
 		success : function(data) {   
 	    	$("#output-xml-to-json").val(JSON.stringify(data,null,4));
+	    	$.ajax({
+	    		type: "GET",
+	    		url: url + "mark",
+	    		data: {xmltojson:"success"},
+	    		contentType: "text",
+	    		success:function(data){}
+	    	});
 		},
 		error : function(){
 			$("#output-xml-to-json").val("xml2json error");
+			$.ajax({
+	    		type: "GET",
+	    		url: url + "mark",
+	    		data: {xmltojson:"fail"},
+	    		contentType: "text",
+	    		success:function(data){}
+	    	});
 		}
 	});
 }
@@ -95,27 +103,38 @@ var json2xml = function(_data){
 	    cache: false,
 		success : function(data) {  
 			var xmlText = new XMLSerializer().serializeToString(data);
+			xmlText = xmlText.substring(0,38)+"\n"+xmlText.substring(38);
 	    	$("#output-json-to-xml").val(xmlText);
+	    	$.ajax({
+	    		type: "GET",
+	    		url: url + "mark",
+	    		data: {jsontoxml:"success"},
+	    		contentType: "text",
+	    		success:function(data){}
+	    	});
 		},
 		error : function(){
 			$("#output-json-to-xml").val("json2xml error");
+			$.ajax({
+	    		type: "GET",
+	    		url: url + "mark",
+	    		data: {jsontoxml:"fail"},
+	    		contentType: "text",
+	    		success:function(data){}
+	    	});
 		}
 	});
 }
 
 $("#convert-xml-to-json").on("click",function(){
 	var data = $("#input-xml").val();
-	if(!data) {
-		data = "<data></data>"
-	}
+
 	xml2json(data);
 });
 
 $("#convert-json-to-xml").on("click",function(){
 	var data = $("#input-json").val();
-	if(!data) {
-		data = "{ a : 1 }"
-	}
+
 	json2xml(data);
 });
 </script>
