@@ -8,6 +8,17 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<!-- chart -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+<script src="chartjs/utils.js"></script>
+<style>
+	canvas {
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+</style>
 <meta charset="UTF-8">
 <title>XML - JSON Converter</title>
 
@@ -21,17 +32,17 @@ textarea{
 <body>
 	<div style="text-align:center;"><h2>XML - JSON Converter</h2></div>
 	<div class="container-fluid" style="margin-top:20px;">
-		<div class="row">			
+		<div class="rows">			
 			<!-- buttons -->
-			<div>				
-				<button id="id-xml-to-json" type="button" class="btn btn-primary" style="margin-left:20px;float:left;width:30%;">xml to json</button>	
+			<ul class="nav nav-tabs">				
+				<li id="id-xml-to-json"><a data-toggle="tab">XML to Json</a></li>	
 						
-				<button id="id-json-to-xml" type="button" class="btn btn-danger" style="margin-left:3.5%;float:center;width:30%;">json to xml</button>		
+				<li id="id-json-to-xml"><a data-toggle="tab">Json to XML</a></li>		
 				
-				<button id="id-status" type="button" class="btn btn-warning" style="margin-right:20px;float:right;width:30%;">통계</button>		
-			</div>			
+				<li id="id-status"><a data-toggle="tab">통계</a></li>		
+			</ul>			
 		</div>
-		<div class="row" style="margin-top:20px;">
+		<div class="row">
 			<!-- output -->
 			<div>
 				<div id="xml-to-json" style="display:none;position:relative;">					
@@ -39,7 +50,7 @@ textarea{
 						<textarea id="input-xml" style="float:left;"></textarea>
 					</div>
 					
-					<button type="button" id="convert-xml-to-json" class="btn btn-success" style="position:absolute;left:50%;top:240px;margin-left:-35px;">convert</button>
+					<button type="button" id="convert-xml-to-json" class="btn btn-primary" style="position:absolute;left:50%;top:240px;margin-left:-45px;">convert →</button>
 					
 					<div style="float:right;width:40%;margin-right:20px;"><h3>Output Json</h3>
 						<textarea id="output-xml-to-json" style="float:right;"></textarea>
@@ -51,7 +62,7 @@ textarea{
 						<textarea id="input-json" style="float:left;"></textarea>
 					</div>
 					
-					<button type="button" id="convert-json-to-xml" class="btn btn-success" style="position:absolute;left:50%;top:240px;margin-left:-35px;">convert</button>
+					<button type="button" id="convert-json-to-xml" class="btn btn-danger" style="position:absolute;left:50%;top:240px;margin-left:-45px;">convert →</button>
 					
 					<div style="float:right;width:40%;margin-right:20px;"><h3>Output XML</h3>
 						<textarea id="output-json-to-xml" style="float:right;"></textarea>
@@ -60,16 +71,25 @@ textarea{
 			</div>
 		</div>
 		<div id="status-container" style="display:none;position:relative;margin-top:20px;">
-			<div class="alert alert-info" style="float:left;width:40%;margin-left:10px;">
-				XML to Json
-				<div id="xtoj-status-show"></div>				
-			</div>			
-			<div class="alert alert-danger" style="float:right;width:40%;margin-right:10px;">
-				Json to XML
-				<div id="jtox-status-show"></div>
-			</div>
+			<div>
+				<div class="panel panel-info" style="float:left;width:40%;margin-left:10px;">
+					<div class="panel-heading">XML to Json</div>
+					<div class="panel-body" id="xtoj-status-show"></div>				
+				</div>			
+				<div class="panel panel-danger" style="float:right;width:40%;margin-right:10px;">
+					<div class="panel-heading">Json to XML</div>
+					<div class="panel-body" id="jtox-status-show"></div>
+				</div>	
+			</div>	
 			
-		</div>
+			<div id="container" style="width:300px;float:left;">
+				<canvas id="xtoj_chart" style="float:left;"></canvas>				
+			</div>
+			<div id="container" style="width:300px;float:right;">
+				<canvas id="jtox_chart" style="float:right;"></canvas>
+			</div>		
+		</div>		
+		
 	</div>
 </body>
 
@@ -161,7 +181,8 @@ function getStatus(){
 		var jtox_success = data["Json-to-XML"]["success"];
 		var jtox_fail = data["Json-to-XML"]["fail"];
 		$("#jtox-status-show").html("성공: "+jtox_success+" 실패: "+jtox_fail);
-	});
+		createChart(xtoj_success,xtoj_fail,jtox_success,jtox_fail);
+	});		
 }
 
 $("#convert-xml-to-json").on("click",function(){
@@ -180,6 +201,54 @@ $("#id-status").on("click",function(){
 	$("#json-to-xml").hide();
 	$("#status-container").show();	
 });
+
+function createChart(xtojs,xtojf,jtoxs,jtoxf){
+	var ctx = document.getElementById("xtoj_chart");
+	var myChart = new Chart(ctx, {
+	    type: 'pie',
+	    data: {
+	        labels: ["성공", "실패"],
+	        datasets: [{            
+	            data: [
+					xtojs,
+					xtojf
+				],
+	            backgroundColor: [	
+					'rgba(54, 162, 235, 0.2)',
+					'rgba(255, 99, 132, 0.2)'
+	            ],
+	            borderColor: [
+	            	'rgba(54, 162, 235, 1)',
+	            	'rgba(255,99,132,1)'
+	            ],
+	            borderWidth: 1
+	        }]
+	    }
+	});	
+
+	var ctx = document.getElementById("jtox_chart");
+	var myChart = new Chart(ctx, {
+	    type: 'pie',
+	    data: {
+	        labels: ["성공", "실패"],
+	        datasets: [{            
+	            data: [
+					jtoxs,
+					jtoxf
+				],
+	            backgroundColor: [	
+					'rgba(54, 162, 235, 0.2)',
+					'rgba(255, 99, 132, 0.2)'
+	            ],
+	            borderColor: [
+	            	'rgba(54, 162, 235, 1)',
+	            	'rgba(255,99,132,1)'
+	            ],
+	            borderWidth: 1
+	        }]
+	    }
+	});	
+}
 
 </script>
 
