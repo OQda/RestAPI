@@ -9,41 +9,66 @@
 <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 <meta charset="UTF-8">
-<title>GUIDE</title>
+<title>XML - JSON Converter</title>
 
 <style>
 textarea{
-	width:40%;
-	height:250px;
+	width:100%;
+	height:400px;
 }
 </style>
 </head>
 <body>
+	<div style="text-align:center;"><h2>XML - JSON Converter</h2></div>
 	<div class="container-fluid" style="margin-top:20px;">
 		<div class="row">			
 			<!-- buttons -->
 			<div>				
-				<button id="id-xml-to-json" type="button" class="btn btn-primary btn-block" style="margin-left:20px;float:left;width:40%;">xml to json</button>	
+				<button id="id-xml-to-json" type="button" class="btn btn-primary" style="margin-left:20px;float:left;width:30%;">xml to json</button>	
 						
-				<button id="id-json-to-xml" type="button" class="btn btn-danger btn-block" style="margin-right:20px;margin-top:0px;float:right;width:40%;">json to xml</button>				
+				<button id="id-json-to-xml" type="button" class="btn btn-danger" style="margin-left:3.5%;float:center;width:30%;">json to xml</button>		
+				
+				<button id="id-status" type="button" class="btn btn-warning" style="margin-right:20px;float:right;width:30%;">통계</button>		
 			</div>			
 		</div>
 		<div class="row" style="margin-top:20px;">
 			<!-- output -->
 			<div>
-				<div id="xml-to-json" style="display:none;position:relative;">
-					<textarea id="input-xml" placeholder="input XML" style="margin-left:20px;float:left;"></textarea>
-					<button type="button" id="convert-xml-to-json" style="position:absolute;float:center;left:50%;top:110px;margin-left:-30px;">convert</button>
-					<textarea id="output-xml-to-json" placeholder="output JSON" style="margin-right:20px;float:right;"></textarea>
+				<div id="xml-to-json" style="display:none;position:relative;">					
+					<div style="float:left;width:40%;margin-left:20px;"><h3>Input XML</h3>
+						<textarea id="input-xml" style="float:left;"></textarea>
+					</div>
+					
+					<button type="button" id="convert-xml-to-json" class="btn btn-success" style="position:absolute;left:50%;top:240px;margin-left:-35px;">convert</button>
+					
+					<div style="float:right;width:40%;margin-right:20px;"><h3>Output Json</h3>
+						<textarea id="output-xml-to-json" style="float:right;"></textarea>
+					</div>					
 				</div>
 				
 				<div id="json-to-xml" style="display:none;position:relative;">
-					<textarea id="input-json" placeholder="input JSON" style="margin-left:20px;float:left;"></textarea>
-					<button type="button" id="convert-json-to-xml" style="position:absolute;left:50%;top:110px;margin-left:-30px;">convert</button>
-					<textarea id="output-json-to-xml" placeholder="output XML" style="margin-right:20px;float:right;"></textarea>
+					<div style="float:left;width:40%;margin-left:20px;"><h3>Input Json</h3>
+						<textarea id="input-json" style="float:left;"></textarea>
+					</div>
 					
+					<button type="button" id="convert-json-to-xml" class="btn btn-success" style="position:absolute;left:50%;top:240px;margin-left:-35px;">convert</button>
+					
+					<div style="float:right;width:40%;margin-right:20px;"><h3>Output XML</h3>
+						<textarea id="output-json-to-xml" style="float:right;"></textarea>
+					</div>							
 				</div>
 			</div>
+		</div>
+		<div id="status-container" style="display:none;position:relative;margin-top:20px;">
+			<div class="alert alert-info" style="float:left;width:40%;margin-left:10px;">
+				XML to Json
+				<div id="xtoj-status-show"></div>				
+			</div>			
+			<div class="alert alert-danger" style="float:right;width:40%;margin-right:10px;">
+				Json to XML
+				<div id="jtox-status-show"></div>
+			</div>
+			
 		</div>
 	</div>
 </body>
@@ -54,12 +79,14 @@ $("#id-xml-to-json").on("click",function(){
 	$("#output-xml-to-json").empty();
 	$("#xml-to-json").show();
 	$("#json-to-xml").hide();
+	$("#status-container").hide();
 });
 
 $("#id-json-to-xml").on("click",function(){
 	$("#xml-to-json").hide();
 	$("#output-json-to-xml").empty();
 	$("#json-to-xml").show();
+	$("#status-container").hide();
 });
 
 var url = "http://localhost:8080/";
@@ -126,17 +153,34 @@ var json2xml = function(_data){
 	});
 }
 
-$("#convert-xml-to-json").on("click",function(){
-	var data = $("#input-xml").val();
+function getStatus(){
+	$.getJSON(url+"status", function(data){	
+		var xtoj_success = data["XML-to-Json"]["success"];
+		var xtoj_fail = data["XML-to-Json"]["fail"];
+		$("#xtoj-status-show").html("성공: "+xtoj_success+" 실패: "+xtoj_fail);
+		var jtox_success = data["Json-to-XML"]["success"];
+		var jtox_fail = data["Json-to-XML"]["fail"];
+		$("#jtox-status-show").html("성공: "+jtox_success+" 실패: "+jtox_fail);
+	});
+}
 
+$("#convert-xml-to-json").on("click",function(){
+	var data = $("#input-xml").val();	
 	xml2json(data);
 });
 
 $("#convert-json-to-xml").on("click",function(){
-	var data = $("#input-json").val();
-
+	var data = $("#input-json").val();	
 	json2xml(data);
 });
+
+$("#id-status").on("click",function(){
+	getStatus();
+	$("#xml-to-json").hide();
+	$("#json-to-xml").hide();
+	$("#status-container").show();	
+});
+
 </script>
 
 </html>
