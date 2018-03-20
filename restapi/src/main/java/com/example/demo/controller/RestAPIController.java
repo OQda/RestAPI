@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.github.asilvestre.jpurexml.XmlParseException;
+
 import process_jsonToxml.XmlConverter;
 import process_statusSave.statusEntity;
 import process_statusSave.statusRepository;
@@ -34,7 +36,7 @@ import process_xmlTojson.JsonConverter;
 @EntityScan("process_statusSave")
 @EnableJpaRepositories("process_statusSave")
 @RestController
-public class RestAPIController {	
+public class RestAPIController {
 
     @Autowired
     private statusRepository repository;
@@ -46,7 +48,21 @@ public class RestAPIController {
     public String xtoj(HttpServletRequest request, 
 			@RequestBody String xml) throws IOException {
     	
-    	return dualConverter.xml2json(xml);
+    	String parsehelper = xml;
+    	
+    	//1
+    	if (xml.contains("<?xml")) {
+    		parsehelper = xml.substring(0,xml.indexOf("<?xml"))+xml.substring(xml.indexOf("?>")+3);
+    	}
+    	
+    	//2
+    	parsehelper = "<xxtemptag>"+parsehelper+"</xxtemptag>";
+    	
+    	try {
+			return JsonConverter.convertXml(parsehelper);
+		} catch (XmlParseException e) {
+			return "";
+		}
     }
     
     @RequestMapping(value="/json2xml",
