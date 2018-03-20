@@ -48,9 +48,9 @@ public class dualConverter {
                 e.printStackTrace();    
             }    
         }    
-//        if(output.toString().length()>=38){//remove <?xml version="1.0" encoding="UTF-8"?>            
-//        	return output.toString().substring(38);    
-//        }
+        if(output.toString().length()>=38){//remove <?xml version="1.0" encoding="UTF-8"?>            
+        	return output.toString().substring(38);    
+        }
         return output.toString();    
     }    
         

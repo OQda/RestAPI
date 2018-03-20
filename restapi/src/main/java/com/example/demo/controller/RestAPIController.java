@@ -39,22 +39,12 @@ public class RestAPIController {
     @Autowired
     private statusRepository repository;
 	
-	JsonConverter json_converter = new JsonConverter();
-	XmlConverter xml_converter = new XmlConverter();
-
     @RequestMapping(value="/xml2json",
     		method=RequestMethod.POST,
     		consumes="application/xml",
     		produces="application/json")
     public String xtoj(HttpServletRequest request, 
 			@RequestBody String xml) throws IOException {
-//    	Map<String,Object> map = new HashMap<String,Object>();
-//    	map.put("xml2json", "success");
-    	
-//      System.out.println("xml2json success \n"+xml);
-//      return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
-    	
-//    	return json_converter.convertXml(xml);
     	
     	return dualConverter.xml2json(xml);
     }
@@ -65,16 +55,8 @@ public class RestAPIController {
     		produces="application/xml")
     public String jtox(HttpServletRequest request, 
 			@RequestBody String json) throws XMLStreamException, TransformerConfigurationException, TransformerException, IOException {
-    	
-//    	String xml = "<?xml version='1.0' encoding='utf-8'?>"; 
-//    	xml += "<service></service>";
-//        System.out.println("json2xml success \n"+json);
-//    	return xml;
-    	
-//    	return xml_converter.convertJson(json);
-//    	System.out.println(dual_converter.json2xml(json));
-    	
-    	return dualConverter.json2xml(json);
+    	    	    		
+    	return "<xxtemptag>"+dualConverter.json2xml(json)+"</xxtemptag>";
   
     }
     

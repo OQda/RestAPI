@@ -32,7 +32,7 @@ textarea{
 <body>
 	<div style="text-align:center;"><h2>XML - JSON Converter</h2></div>
 	<div class="container-fluid" style="margin-top:20px;">
-		<div class="rows">			
+		<div>			
 			<!-- buttons -->
 			<ul class="nav nav-tabs">				
 				<li id="id-xml-to-json"><a data-toggle="tab">XML to Json</a></li>	
@@ -150,7 +150,7 @@ var json2xml = function(_data){
 	    cache: false,
 		success : function(data) {  
 			var xmlText = new XMLSerializer().serializeToString(data);
-			xmlText = xmlText.substring(0,38)+"\n"+xmlText.substring(38);
+			xmlText = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+xmlText.substring(11,xmlText.length-13);
 	    	$("#output-json-to-xml").val(xmlText);
 	    	$.ajax({
 	    		type: "GET",
