@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.github.asilvestre.jpurexml.XmlParseException;
 
+import process_availableCheck.simpleCheck;
 import process_jsonToxml.XmlConverter;
 import process_statusSave.statusEntity;
 import process_statusSave.statusRepository;
@@ -44,7 +45,7 @@ public class RestAPIController {
 			@RequestBody String xml) throws IOException {
     	
     	// xml 태그 형식이 아닌 경우 null 전송
-    	if (!tagInValue(xml)) return "";    	
+    	if ( !simpleCheck.tagInValue(xml) ) return "";    	
     	
     	// <?xml version="1.0" encoding="UTF-8"?> 제거 후 임시태그 추가
     	String parsehelper = xml;    	
@@ -67,6 +68,9 @@ public class RestAPIController {
     		produces="application/xml")
     public String jtox(HttpServletRequest request, 
 			@RequestBody String json) throws IOException {
+    	
+    	// {로 시작하지 않는 값일 때 null 전송
+    	if ( !simpleCheck.startInBrace(json) ) return "<xxtemptag></xxtemptag>";
     	    	    		
     	return "<xxtemptag>"+dualConverter.json2xml(json)+"</xxtemptag>";
   
@@ -110,13 +114,5 @@ public class RestAPIController {
     	
     	return godata;
     }
-    
-    boolean tagInValue(String xml) {
-    	if ( xml.contains("<") && xml.contains(">") && xml.contains("</") ) {
-    		return true;
-    	}else {
-    		return false;
-    	}    	
-    }
-   
+       
 }
