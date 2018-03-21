@@ -2,13 +2,9 @@ package com.example.demo.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,7 +12,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,21 +43,22 @@ public class RestAPIController {
     public String xtoj(HttpServletRequest request, 
 			@RequestBody String xml) throws IOException {
     	
-    	String parsehelper = xml;
+    	// xml 태그 형식이 아닌 경우 null 전송
+    	if (!tagInValue(xml)) return "";    	
     	
-    	//1
+    	// <?xml version="1.0" encoding="UTF-8"?> 제거 후 임시태그 추가
+    	String parsehelper = xml;    	
     	if (xml.contains("<?xml")) {
     		parsehelper = xml.substring(0,xml.indexOf("<?xml"))+xml.substring(xml.indexOf("?>")+3);
     	}
-    	
-    	//2
     	parsehelper = "<xxtemptag>"+parsehelper+"</xxtemptag>";
     	
-    	try {
-			return JsonConverter.convertXml(parsehelper);
-		} catch (XmlParseException e) {
-			return "";
-		}
+//    	try {
+//			return JsonConverter.convertXml(parsehelper);
+//		} catch (XmlParseException e) {
+//			return "";
+//		}
+    	return dualConverter.xml2json(parsehelper);    	
     }
     
     @RequestMapping(value="/json2xml",
@@ -70,7 +66,7 @@ public class RestAPIController {
     		consumes="application/json",
     		produces="application/xml")
     public String jtox(HttpServletRequest request, 
-			@RequestBody String json) throws XMLStreamException, TransformerConfigurationException, TransformerException, IOException {
+			@RequestBody String json) throws IOException {
     	    	    		
     	return "<xxtemptag>"+dualConverter.json2xml(json)+"</xxtemptag>";
   
@@ -113,6 +109,14 @@ public class RestAPIController {
     	statusEntity godata = repository.save(testdata);
     	
     	return godata;
+    }
+    
+    boolean tagInValue(String xml) {
+    	if ( xml.contains("<") && xml.contains(">") && xml.contains("</") ) {
+    		return true;
+    	}else {
+    		return false;
+    	}    	
     }
    
 }

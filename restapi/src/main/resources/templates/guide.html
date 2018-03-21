@@ -2,12 +2,11 @@
 <html>
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<!-- 합쳐지고 최소화된 최신 CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-<!-- 부가적인 테마 -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-<!-- 합쳐지고 최소화된 최신 자바스크립트 -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<!--  CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+
 <!-- chart -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
@@ -30,41 +29,45 @@ textarea{
 </style>
 </head>
 <body>
-	<div style="text-align:center;"><h2>XML - JSON Converter</h2></div>
+	<div style="text-align:center;margin-top:20px;"><h2>XML - JSON Converter</h2></div>
 	<div class="container-fluid" style="margin-top:20px;">
 		<div>			
 			<!-- buttons -->
-			<ul class="nav nav-tabs">				
-				<li id="id-xml-to-json"><a data-toggle="tab">XML to Json</a></li>	
+			<ul class="nav nav-tabs" role="tablist">				
+				<li class="nav-item" id="id-xml-to-json"><a class="nav-link" data-toggle="tab" href="">XML to Json</a></li>	
 						
-				<li id="id-json-to-xml"><a data-toggle="tab">Json to XML</a></li>		
+				<li class="nav-item" id="id-json-to-xml"><a class="nav-link" data-toggle="tab" href="">Json to XML</a></li>		
 				
-				<li id="id-status"><a data-toggle="tab">통계</a></li>		
+				<li class="nav-item" id="id-status"><a class="nav-link" data-toggle="tab" href="">통계</a></li>		
 			</ul>			
 		</div>
-		<div class="row">
+		<div style="margin-top:20px;">
 			<!-- output -->
 			<div>
 				<div id="xml-to-json" style="display:none;position:relative;">					
-					<div style="float:left;width:40%;margin-left:20px;"><h3>Input XML</h3>
+					<div style="float:left;width:40%;margin-left:20px;">
+						<h3>Input XML <button type="button" class="btn btn-outline-primary btn-sm" id="input-xml-empty">지우기</button></h3>				
 						<textarea id="input-xml" style="float:left;"></textarea>
 					</div>
 					
-					<button type="button" id="convert-xml-to-json" class="btn btn-primary" style="position:absolute;left:50%;top:240px;margin-left:-45px;">convert →</button>
+					<button type="button" id="convert-xml-to-json" class="btn btn-primary" style="position:absolute;left:50%;top:240px;margin-left:-49px;">convert →</button>
 					
-					<div style="float:right;width:40%;margin-right:20px;"><h3>Output Json</h3>
+					<div style="float:right;width:40%;margin-right:20px;">
+						<h3>Output Json <button type="button" class="btn btn-outline-primary btn-sm" id="output-json-empty">지우기</button></h3>
 						<textarea id="output-xml-to-json" style="float:right;"></textarea>
 					</div>					
 				</div>
 				
 				<div id="json-to-xml" style="display:none;position:relative;">
-					<div style="float:left;width:40%;margin-left:20px;"><h3>Input Json</h3>
+					<div style="float:left;width:40%;margin-left:20px;">
+						<h3>Input Json <button type="button" class="btn btn-outline-danger btn-sm" id="input-json-empty">지우기</button></h3>
 						<textarea id="input-json" style="float:left;"></textarea>
 					</div>
 					
-					<button type="button" id="convert-json-to-xml" class="btn btn-danger" style="position:absolute;left:50%;top:240px;margin-left:-45px;">convert →</button>
+					<button type="button" id="convert-json-to-xml" class="btn btn-danger" style="position:absolute;left:50%;top:240px;margin-left:-49px;">convert →</button>
 					
-					<div style="float:right;width:40%;margin-right:20px;"><h3>Output XML</h3>
+					<div style="float:right;width:40%;margin-right:20px;">
+						<h3>Output XML <button type="button" class="btn btn-outline-danger btn-sm" id="output-xml-empty">지우기</button></h3>
 						<textarea id="output-json-to-xml" style="float:right;"></textarea>
 					</div>							
 				</div>
@@ -72,21 +75,21 @@ textarea{
 		</div>
 		<div id="status-container" style="display:none;position:relative;margin-top:20px;">
 			<div>
-				<div class="panel panel-info" style="float:left;width:40%;margin-left:10px;">
-					<div class="panel-heading">XML to Json</div>
-					<div class="panel-body" id="xtoj-status-show"></div>				
+				<div class="card border-primary" style="float:left;width:40%;margin-left:10px;">
+					<div class="card-header bg-primary border-primary text-white">XML to Json</div>
+					<div class="card-body" id="xtoj-status-show"></div>				
 				</div>			
-				<div class="panel panel-danger" style="float:right;width:40%;margin-right:10px;">
-					<div class="panel-heading">Json to XML</div>
-					<div class="panel-body" id="jtox-status-show"></div>
+				<div class="card border-danger" style="float:right;width:40%;margin-right:10px;">
+					<div class="card-header bg-danger border-danger text-white">Json to XML</div>
+					<div class="card-body" id="jtox-status-show"></div>
 				</div>	
 			</div>	
 			
-			<div id="container" style="width:300px;float:left;">
-				<canvas id="xtoj_chart" style="float:left;"></canvas>				
+			<div id="xtoj_container" style="width:40%;float:left;">
+				<canvas id="xtoj_chart"></canvas>				
 			</div>
-			<div id="container" style="width:300px;float:right;">
-				<canvas id="jtox_chart" style="float:right;"></canvas>
+			<div id="jtox_container" style="width:40%;float:right;margin-right:20px;">
+				<canvas id="jtox_chart"></canvas>
 			</div>		
 		</div>		
 		
@@ -95,8 +98,20 @@ textarea{
 
 <script>
 
+$("#input-xml-empty").on("click",function(){
+	$("#input-xml").val("");
+});
+$("#output-json-empty").on("click",function(){
+	$("#output-xml-to-json").val("");
+});
+$("#input-json-empty").on("click",function(){
+	$("#input-json").val("");
+});
+$("#output-xml-empty").on("click",function(){
+	$("#output-json-to-xml").val("");
+});
+
 $("#id-xml-to-json").on("click",function(){
-	$("#output-xml-to-json").empty();
 	$("#xml-to-json").show();
 	$("#json-to-xml").hide();
 	$("#status-container").hide();
@@ -104,7 +119,6 @@ $("#id-xml-to-json").on("click",function(){
 
 $("#id-json-to-xml").on("click",function(){
 	$("#xml-to-json").hide();
-	$("#output-json-to-xml").empty();
 	$("#json-to-xml").show();
 	$("#status-container").hide();
 });
@@ -216,49 +230,49 @@ $("#id-status").on("click",function(){
 });
 
 function createChart(xtojs,xtojf,jtoxs,jtoxf){
+	$("#xtoj_chart").remove();
+	$("#xtoj_container").append('<canvas id="xtoj_chart"><cnavas>');
+	$("#jtox_chart").remove();
+	$("#jtox_container").append('<canvas id="jtox_chart"><cnavas>');
 	var ctx = document.getElementById("xtoj_chart");
 	var myChart = new Chart(ctx, {
-	    type: 'pie',
+	    type: 'horizontalBar',
 	    data: {
-	        labels: ["성공", "실패"],
-	        datasets: [{            
-	            data: [
-					xtojs,
-					xtojf
-				],
-	            backgroundColor: [	
-					'rgba(54, 162, 235, 0.2)',
-					'rgba(255, 99, 132, 0.2)'
-	            ],
-	            borderColor: [
-	            	'rgba(54, 162, 235, 1)',
-	            	'rgba(255,99,132,1)'
-	            ],
+	        datasets: [{
+	        	label: '성공',
+	            data: [xtojs,0],
+	            backgroundColor: 'rgba(11, 201, 4, 0.2)',
+	            borderColor: 'rgba(11, 201, 4, 1)',
 	            borderWidth: 1
-	        }]
-	    }
+	        }, {
+	        	label: '실패',
+	        	data: [xtojf,0],
+	        	backgroundColor: 'rgba(255, 54, 54, 0.2)',
+	        	borderColor: 'rgba(255, 54, 54, 1)',
+	        	borderWidth: 1
+	        	}
+	       ]
+		}
 	});	
 
 	var ctx = document.getElementById("jtox_chart");
 	var myChart = new Chart(ctx, {
-	    type: 'pie',
+	    type: 'horizontalBar',
 	    data: {
-	        labels: ["성공", "실패"],
-	        datasets: [{            
-	            data: [
-					jtoxs,
-					jtoxf
-				],
-	            backgroundColor: [	
-					'rgba(54, 162, 235, 0.2)',
-					'rgba(255, 99, 132, 0.2)'
-	            ],
-	            borderColor: [
-	            	'rgba(54, 162, 235, 1)',
-	            	'rgba(255,99,132,1)'
-	            ],
+	        datasets: [{
+	        	label: '성공',
+	            data: [jtoxs,0],
+	            backgroundColor: 'rgba(11, 201, 4, 0.2)',
+	            borderColor: 'rgba(11, 201, 4, 1)',
 	            borderWidth: 1
-	        }]
+	        }, {
+	        	label: '실패',
+	        	data: [jtoxf,0],
+	        	backgroundColor: 'rgba(255, 54, 54, 0.2)',
+	        	borderColor: 'rgba(255, 54, 54, 1)',
+	        	borderWidth: 1
+	        	}
+	       ]
 	    }
 	});	
 }
