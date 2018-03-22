@@ -47,7 +47,7 @@ textarea{
 					<div style="float:left;width:40%;margin-left:20px;">
 						<h3>Input XML
 							<button type="button" class="btn btn-outline-primary btn-sm" id="xml-sample" style="float:right;">sample</button>
-							<button type="button" class="btn btn-outline-primary btn-sm" id="input-xml-empty" style="float:right;margin-right:170px;">지우기</button>
+							<button type="button" class="btn btn-outline-primary btn-sm" id="input-xml-empty" style="float:center;">지우기</button>
 						</h3>						
 						<textarea id="input-xml" style="float:left;"></textarea>
 					</div>
@@ -57,7 +57,7 @@ textarea{
 					<div style="float:right;width:40%;margin-right:20px;">
 						<h3>
 						Output Json
-							<button type="button" class="btn btn-outline-primary btn-sm" id="output-json-empty" style="float:right;margin-right:210px;">지우기</button>
+							<button type="button" class="btn btn-outline-primary btn-sm" id="output-json-empty" style="float:center;">지우기</button>
 						</h3>
 						<textarea id="output-xml-to-json" style="float:right;"></textarea>
 					</div>					
@@ -67,7 +67,7 @@ textarea{
 					<div style="float:left;width:40%;margin-left:20px;">
 						<h3>Input Json
 							<button type="button" class="btn btn-outline-danger btn-sm" id="json-sample" style="float:right;">sample</button>
-							<button type="button" class="btn btn-outline-danger btn-sm" id="input-json-empty" style="float:right;margin-right:170px;">지우기</button></h3>
+							<button type="button" class="btn btn-outline-danger btn-sm" id="input-json-empty" style="float:center;">지우기</button></h3>
 						<textarea id="input-json" style="float:left;"></textarea>
 					</div>
 					
@@ -75,7 +75,7 @@ textarea{
 					
 					<div style="float:right;width:40%;margin-right:20px;">
 						<h3>Output XML
-							<button type="button" class="btn btn-outline-danger btn-sm" id="output-xml-empty" style="float:right;margin-right:210px;">지우기</button>
+							<button type="button" class="btn btn-outline-danger btn-sm" id="output-xml-empty" style="float:center;">지우기</button>
 						</h3>
 						<textarea id="output-json-to-xml" style="float:right;"></textarea>
 					</div>							
@@ -175,7 +175,7 @@ var xml2json = function(_data){
 	    	});
 		},
 		error : function(){
-			$("#output-xml-to-json").val("xml2json error");
+			$("#output-xml-to-json").val("XML to Json에서 에러 발생!\n형식을 확인해주세요.");
 			$.ajax({
 	    		type: "GET",
 	    		url: url + "mark",
@@ -196,8 +196,9 @@ var json2xml = function(_data){
 	    cache: false,
 		success : function(data) {  
 			var xmlText = new XMLSerializer().serializeToString(data);
+			//alert(xmlText);
 			if (xmlText == '<xxtemptag/>'){
-				$("#output-json-to-xml").val("json2xml error");
+				$("#output-json-to-xml").val("Json to XML에서 에러 발생!\n형식을 확인해주세요.");
 				$.ajax({
 		    		type: "GET",
 		    		url: url + "mark",
@@ -218,7 +219,7 @@ var json2xml = function(_data){
 			}			
 		},
 		error : function(){
-			$("#output-json-to-xml").val("json2xml error");
+			$("#output-json-to-xml").val("Json to XML에서 에러 발생!\n형식을 확인해주세요.");
 			$.ajax({
 	    		type: "GET",
 	    		url: url + "mark",

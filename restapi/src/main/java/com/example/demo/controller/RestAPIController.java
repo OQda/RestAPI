@@ -69,11 +69,21 @@ public class RestAPIController {
     public String jtox(HttpServletRequest request, 
 			@RequestBody String json) throws IOException {
     	
+    	String errorCode = "<xxtemptag></xxtemptag>";
+    	
+    	// 기본 유효성 검사
+    	if ( !simpleCheck.jsonValidCheck(json) ) return errorCode;
+    	
     	// {로 시작하지 않는 값일 때 null 전송
-    	if ( !simpleCheck.startInBrace(json) ) return "<xxtemptag></xxtemptag>";
-    	    	    		
+    	if ( !simpleCheck.startInBrace(json) ) return errorCode;
+    	
+    	// {} ← 이렇게만 입력됐을 때 null 전송
+    	if ( "\n".equals(dualConverter.json2xml(json)) ) return errorCode;
+    	
+    	// 마지막 } 뒤에 다른 값이 입력됐을 때 null 전송
+    	if ( !simpleCheck.endInBrace(json) ) return errorCode;
+    	    	
     	return "<xxtemptag>"+dualConverter.json2xml(json)+"</xxtemptag>";
-  
     }
     
     @RequestMapping(value="/status",

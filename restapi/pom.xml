@@ -24,7 +24,13 @@
 		<java.version>1.8</java.version>
 	</properties>
 
-	<dependencies>		
+	<dependencies>	
+	
+		<!-- Json 유효성 검사 JSONUtil 사용 -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		</dependency>	
 		
 		<!-- 참고 라이브러리 XML → JSON (https://github.com/asilvestre/jxmltojson) -->
 		<dependency>
